@@ -1,0 +1,190 @@
+<title>Plantilla Azul y Oro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: cabecera azul con datos resumen, filtro por línea y rejilla de fichas agrupada por línea (porteros, defensas, medios, delanteros). */
+:root {
+  --bg: #eef1f7;
+  --surface: #ffffff;
+  --fg: #0d1a36;
+  --muted: #55627f;
+  --line: #d6dcea;
+  --navy: #11307a;
+  --on-navy: #f4f7ff;
+  --gold: #f0b90b;
+  --on-gold: #0d1a36;
+  --note-bg: #fff6d8;
+  --note-fg: #4a3800;
+  --photo-bg: #dfe5f1;
+  --font-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1226; --surface: #131f3d; --fg: #e9eefc; --muted: #9aa8c9; --line: #25345a;
+    --navy: #0f2a6b; --on-navy: #f4f7ff; --gold: #f3c43a; --on-gold: #0d1a36;
+    --note-bg: #2e2810; --note-fg: #f6e4a6; --photo-bg: #1b2a50;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a1226; --surface: #131f3d; --fg: #e9eefc; --muted: #9aa8c9; --line: #25345a;
+  --navy: #0f2a6b; --on-navy: #f4f7ff; --gold: #f3c43a; --on-gold: #0d1a36;
+  --note-bg: #2e2810; --note-fg: #f6e4a6; --photo-bg: #1b2a50;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.45; margin: 0; }
+.wrap { width: 100%; max-width: 1240px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header { background: var(--navy); color: var(--on-navy); border-bottom: 5px solid var(--gold); }
+header .wrap { padding-block: 28px 24px; display: flex; flex-wrap: wrap; gap: 20px 40px; align-items: end; justify-content: space-between; }
+.kicker { font-family: var(--font-display); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 15px; color: var(--gold); margin: 0 0 4px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(40px, 8vw, 68px); line-height: .95; margin: 0; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+h1 span { color: var(--gold); }
+.stats { display: flex; gap: 28px; margin: 0; padding: 0; list-style: none; }
+.stats li { min-width: 0; }
+.stats b { display: block; font-family: var(--font-display); font-size: 38px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+
+.filters { padding-block: 20px 4px; display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { font: 600 15px var(--font-body); color: var(--fg); background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+.filters button:hover { border-color: var(--navy); }
+.filters button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
+.filters button small { font-size: 13px; opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+main .wrap { padding-block: 12px 48px; }
+section { padding-top: 24px; }
+section h2 { display: flex; align-items: baseline; gap: 12px; font-family: var(--font-display); font-weight: 700; font-size: 30px; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+section h2 small { font-family: var(--font-body); font-weight: 500; font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 16px; }
+@media (max-width: 520px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.photo { aspect-ratio: 4 / 5; background: var(--photo-bg); position: relative; }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pos { position: absolute; left: 0; bottom: 0; background: var(--gold); color: var(--on-gold); font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: .06em; text-transform: uppercase; padding: 4px 12px 3px; border-top-right-radius: 4px; max-width: 92%; }
+.info { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+.name { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.name .sur { display: block; font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.05; text-transform: uppercase; letter-spacing: .01em; }
+.name .giv { display: block; font-size: 15px; color: var(--muted); margin-top: 2px; }
+.meta { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+.age { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.age small { font-family: var(--font-body); font-weight: 500; font-size: 13px; color: var(--muted); margin-left: 4px; }
+.born { font-size: 13px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.note { background: var(--note-bg); color: var(--note-fg); font-size: 14px; border-radius: 4px; padding: 8px 10px; }
+.note b { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+
+footer .wrap { padding-block: 0 40px; color: var(--muted); font-size: 13px; }
+</style>
+
+<header>
+  <div class="wrap">
+    <div>
+      <p class="kicker">Equipo masculino</p>
+      <h1>Plantilla <span>Azul y Oro</span></h1>
+    </div>
+    <ul class="stats" aria-label="Resumen de la plantilla">
+      <li><b id="s-count">24</b><span>Jugadores</span></li>
+      <li><b id="s-avg">–</b><span>Edad media</span></li>
+      <li><b id="s-range">–</b><span>Edades</span></li>
+    </ul>
+  </div>
+</header>
+
+<nav class="wrap filters" id="filters" aria-label="Filtrar por línea"></nav>
+
+<main>
+  <div class="wrap" id="roster"></div>
+</main>
+
+<footer>
+  <div class="wrap">Datos de nombre y fecha de nacimiento según las licencias de la Federació Catalana de Futbol. La edad se calcula con la fecha de hoy.</div>
+</footer>
+
+<script>
+// Para añadir un comentario a un jugador, escribir el texto en "nota".
+var PLAYERS = [
+  { sur: "Alassia", giv: "Santiago", born: "1999-04-03", pos: "Pivote", foto: "Santiago_Alassia", nota: "" },
+  { sur: "Asuama", giv: "King Yeboah", born: "2006-10-28", pos: "Mediocampo ofensivo", foto: "King_Asuama", nota: "" },
+  { sur: "Cabrera Rodríguez", giv: "Kevin Martín", born: "2003-05-16", pos: "Delantero", foto: "Kevin_Cabrera_Rodriguez", nota: "" },
+  { sur: "Campodonico Scaloni", giv: "Lautaro", born: "2005-02-23", pos: "Portero", foto: "Lautaro_Campodonico_Scaloni", nota: "" },
+  { sur: "Ceferino García", giv: "Johan Manuel", born: "1993-04-10", pos: "Mediocampo", foto: "Johan_Manuel_Ceferino_Garcia", nota: "" },
+  { sur: "De Chambost de Lepin Martínez de Albornoz", giv: "Gabriel Buenaventura", born: "2002-05-18", pos: "Central", foto: "Gabriel_De_Chambost", nota: "" },
+  { sur: "Dida", giv: "Nikolai", born: "2005-08-17", pos: "Lateral izquierdo", foto: "Nikolai_Dida", nota: "" },
+  { sur: "Domínguez Ceferino", giv: "Yerson", born: "2002-03-05", pos: "Mediocampo ofensivo", foto: "Yerson_Dominguez_Ceferino", nota: "" },
+  { sur: "Estrada Cuestas", giv: "Harold Santiago", born: "1999-03-15", pos: "Mediocampo", foto: "Harold_Santiago_Estrada_Cuestas", nota: "" },
+  { sur: "Falla Tarazona", giv: "Leonardo Olson", born: "1999-06-27", pos: "Central", foto: "Leonardo_Olson_Falla_Tarazona", nota: "" },
+  { sur: "Gambini", giv: "Facundo Nicolas", born: "1997-03-05", pos: "Pivote", foto: "Facundo_Gambini", nota: "" },
+  { sur: "Grice-Lindsay", giv: "Ocean Tristan", born: "2004-12-03", pos: "Delantero centro", foto: "Ocean_Grice-Lindsay", nota: "" },
+  { sur: "Jaramillo Ceferino", giv: "Gonzalo", born: "2005-12-11", pos: "Mediocampo", foto: "Gonzalo_Jaramillo_Ceferino", nota: "" },
+  { sur: "Ledesma Arevalo", giv: "Andres Felipe", born: "2002-06-15", pos: "Central", foto: "Andres_felipe_Ledesma_arevalo", nota: "" },
+  { sur: "Marin Martinez", giv: "Jordi", born: "2006-06-07", pos: "Central / Medio", foto: "Jordi_Marin_Martinez", nota: "" },
+  { sur: "Medina Sellán", giv: "Jean Paul", born: "2003-12-19", pos: "Lateral derecho / Medio", foto: "Jeanpaul_Medina", nota: "" },
+  { sur: "Morel Galeano", giv: "Juan Ramón", born: "2004-05-27", pos: "Lateral derecho", foto: "Juan_Ramon_Morel_Galeano", nota: "" },
+  { sur: "Navas España", giv: "Danny Damian", born: "2003-06-15", pos: "Pivote", foto: "Damian_Navas", nota: "" },
+  { sur: "Ortega Guzman", giv: "Joel Oriol", born: "2007-08-25", pos: "Central", foto: "Joel_Oriol_Ortega_Guzman", nota: "" },
+  { sur: "Rivalta Munera", giv: "Sergi", born: "2007-09-30", pos: "Mediapunta", foto: "Sergi_Rivalta_Munera", nota: "" },
+  { sur: "Simbine", giv: "Wezu Hélio Ferreira", born: "2006-04-24", pos: "Delantero", foto: "Wesu_Ferreira_Simbine", nota: "" },
+  { sur: "Sosa", giv: "Mateo Jose", born: "2002-09-16", pos: "Mediocampo", foto: "Mateo_Sosa", nota: "" },
+  { sur: "Sosa Ocampo", giv: "Nicolas", born: "2003-10-08", pos: "Central", foto: "Nicolas_Sosa_Ocampo", nota: "" },
+  { sur: "Vázquez Jofré", giv: "Lautaro", born: "2005-09-05", pos: "Mediocampo", foto: "Lautaro_Vazquez_Jofre", nota: "" }
+];
+
+var LINES = [
+  { id: "porteros", title: "Porteros", pos: ["Portero"] },
+  { id: "defensas", title: "Defensas", pos: ["Central", "Central / Medio", "Lateral izquierdo", "Lateral derecho", "Lateral derecho / Medio"] },
+  { id: "medios", title: "Mediocampistas", pos: ["Pivote", "Mediocampo", "Mediocampo ofensivo", "Mediapunta"] },
+  { id: "delanteros", title: "Delanteros", pos: ["Delantero centro", "Delantero"] }
+];
+var MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+
+function parse(s) { var p = s.split("-"); return { y: +p[0], m: +p[1], d: +p[2] }; }
+function ageOn(born, now) {
+  var b = parse(born), a = now.getFullYear() - b.y;
+  var m = now.getMonth() + 1, d = now.getDate();
+  if (m < b.m || (m === b.m && d < b.d)) a--;
+  return a;
+}
+function fmt(born) { var b = parse(born); return b.d + " " + MESES[b.m - 1] + " " + b.y; }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+var now = new Date();
+PLAYERS.forEach(function (p) { p.age = ageOn(p.born, now); });
+
+function card(p) {
+  var note = p.nota ? '<div class="note"><b>Nota</b>' + esc(p.nota) + '</div>' : "";
+  return '<article class="card">' +
+    '<div class="photo"><img src="fotos/' + p.foto + '.jpg" alt="' + esc(p.giv + " " + p.sur) + '" loading="lazy" width="480" height="600"><span class="pos">' + esc(p.pos) + '</span></div>' +
+    '<div class="info"><h3 class="name"><span class="sur">' + esc(p.sur) + '</span><span class="giv">' + esc(p.giv) + '</span></h3>' + note +
+    '<div class="meta"><span class="age">' + p.age + '<small>años</small></span><span class="born">Nació el<br>' + fmt(p.born) + '</span></div></div></article>';
+}
+
+var roster = document.getElementById("roster"), filters = document.getElementById("filters");
+var groups = LINES.map(function (l) {
+  var list = PLAYERS.filter(function (p) { return l.pos.indexOf(p.pos) > -1; })
+    .sort(function (a, b) { return l.pos.indexOf(a.pos) - l.pos.indexOf(b.pos) || a.sur.localeCompare(b.sur, "es"); });
+  return { line: l, list: list };
+});
+roster.innerHTML = groups.map(function (g) {
+  return '<section id="' + g.line.id + '"><h2>' + g.line.title + ' <small>' + g.list.length + '</small></h2><div class="grid">' + g.list.map(card).join("") + '</div></section>';
+}).join("");
+
+var chips = [{ id: "todos", title: "Todos", n: PLAYERS.length }].concat(groups.map(function (g) { return { id: g.line.id, title: g.line.title, n: g.list.length }; }));
+filters.innerHTML = chips.map(function (c, i) {
+  return '<button type="button" data-id="' + c.id + '" aria-pressed="' + (i === 0) + '">' + c.title + '<small>' + c.n + '</small></button>';
+}).join("");
+filters.addEventListener("click", function (e) {
+  var b = e.target.closest("button"); if (!b) return;
+  var id = b.getAttribute("data-id");
+  filters.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+  roster.querySelectorAll("section").forEach(function (s) { s.hidden = !(id === "todos" || s.id === id); });
+});
+
+var ages = PLAYERS.map(function (p) { return p.age; });
+document.getElementById("s-count").textContent = PLAYERS.length;
+document.getElementById("s-avg").textContent = (ages.reduce(function (a, b) { return a + b; }, 0) / ages.length).toFixed(1).replace(".", ",");
+document.getElementById("s-range").textContent = Math.min.apply(null, ages) + "–" + Math.max.apply(null, ages);
+</script>
